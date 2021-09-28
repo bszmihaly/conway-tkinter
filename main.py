@@ -19,9 +19,11 @@ class startApp:
         self.entryThree = Entry(bd=1, font='Courier')
         self.entryThree.pack()
         self.defButton = Button(text='Default settings', command=lambda: self.setDefContents())
-        self.defButton.place(x=195, y=210, height=30, width=100)
+        self.defButton.place(x=140, y=210, height=30, width=100)
+        self.testButton = Button(text='Test', command=lambda: self.makeNewAutoWithGlider(Automata))
+        self.testButton.place(x=250, y=210, height=30, width=100)
         self.newButton = Button(text='New automaton', command=lambda: self.makeNewAuto(Automata))
-        self.newButton.place(x=305, y=210, height=30, width=100)
+        self.newButton.place(x=360, y=210, height=30, width=100)
         self.labelFour = Label(font=('Courier', 10), bg='lightblue')
         self.labelFour.place(y=240)
         self.labelFive = Label(text='Press Enter to step to next generation', font=('Courier', 10), bg='lightblue')
@@ -52,9 +54,13 @@ class startApp:
                 _class(self.new, max(min(self.xCellCount, self.max_value), self.min_value), max(min(self.yCellCount, self.max_value), self.min_value), self.cellSize)
         else:
             self.labelFour['text'] = 'Please only enter NUMBERS!'
+    def makeNewAutoWithGlider(self, _class):
+        self.new = tk.Toplevel(self.root)
+        _class(self.new, 10, 10, 50,True)
 
 class Automata:
-    def __init__(self, root, xCellCount, yCellCount, cellSize):
+    def __init__(self, root, xCellCount, yCellCount, cellSize, hasGlider=False):
+        self.hasGlider = hasGlider
         self.onScreen = []
         self.nextOnScreen = []
         self.neighbours = []
@@ -85,6 +91,12 @@ class Automata:
             self.onScreen.append([])
             for j in range(0, self.xCellCount, 1):
                 self.onScreen[i].append(0)
+        if(self.hasGlider):
+            self.onScreen[0][1] = 1
+            self.onScreen[1][2] = 1
+            self.onScreen[2][0] = 1
+            self.onScreen[2][1] = 1
+            self.onScreen[2][2] = 1
     def makeNextOnScreen(self):
         self.nextOnScreen=[]
         for i in range(0, self.yCellCount, 1):
